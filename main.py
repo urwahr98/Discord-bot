@@ -49,8 +49,6 @@ async def on_ready():
         # if message.content.startswith('$test'):
         #   await( await message.channel.send("`$react x == y` for me to reply with y whenever i see x.")).delete(delay=3)
 
-
-
         if message.content.startswith('$devon'):
             if db['devMode'] == 'off':
                 db['devMode'] = 'on'
@@ -75,7 +73,8 @@ async def on_ready():
           await message.channel.send("`$react x == y` for me to reply with y whenever i see x."
                                       +"\n`$del x` for me to delete x from reply list."
                                       +"\n`$list` for me to list all what I will reply."
-                                      +"\n`$romaji x` for me to turn x from jp to romaji.")
+                                      +"\n`$romaji x` for me to turn x from jp to romaji."
+                                      +"\n`$decide x or y or ..` for me to decide which is the best choice.")
 
         if message.content.startswith('$romaji'):
           text = msg.split('$romaji ')[-1]
@@ -87,6 +86,11 @@ async def on_ready():
             await message.channel.send(sentence)
           except:
             await message.channel.send("Conversion failed!")
+
+        if message.content.startswith('$decide'):
+          listword = msg.split("$decide ")[-1]
+          listword = listword.split(" or ")
+          await message.channel.send("I think that "+ choice(listword) + " is the best choice here!")
 
         if ran == 1:
 
