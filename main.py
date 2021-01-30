@@ -74,7 +74,9 @@ async def on_ready():
                                       +"\n`$del x` for me to delete x from reply list."
                                       +"\n`$list` for me to list all what I will reply."
                                       +"\n`$romaji x` for me to turn x from jp to romaji."
-                                      +"\n`$decide x or y or ..` for me to decide which is the best choice.")
+                                      +"\n`$decide x or y or ..` for me to decide which is the best choice."
+                                      +"\n`$loy` to ping loi."
+                                      +"\n`$cs` to summon Kamen Rider.")
 
         if message.content.startswith('$romaji'):
           text = msg.split('$romaji ')[-1]
@@ -166,7 +168,7 @@ async def on_ready():
            await(await message.channel.send(
                     "⡆⣐⢕⢕⢕⢕⢕⢕⢕⢕⠅⢗⢕⢕⢕⢕⢕⢕⢕⠕⠕⢕⢕⢕⢕⢕⢕⢕⢕⢕ ⢐⢕⢕⢕⢕⢕⣕⢕⢕⠕⠁⢕⢕⢕⢕⢕⢕⢕⢕⠅⡄⢕⢕⢕⢕⢕⢕⢕⢕⢕ ⢕⢕⢕⢕⢕⠅⢗⢕⠕⣠⠄⣗⢕⢕⠕⢕⢕⢕⠕⢠⣿⠐⢕⢕⢕⠑⢕⢕⠵⢕ ⢕⢕⢕⢕⠁⢜⠕⢁⣴⣿⡇⢓⢕⢵⢐⢕⢕⠕⢁⣾⢿⣧⠑⢕⢕⠄⢑⢕⠅⢕ ⢕⢕⠵⢁⠔⢁⣤⣤⣶⣶⣶⡐⣕⢽⠐⢕⠕⣡⣾⣶⣶⣶⣤⡁⢓⢕⠄⢑⢅⢑ ⠍⣧⠄⣶⣾⣿⣿⣿⣿⣿⣿⣷⣔⢕⢄⢡⣾⣿⣿⣿⣿⣿⣿⣿⣦⡑⢕⢤⠱⢐ ⢠⢕⠅⣾⣿⠋⢿⣿⣿⣿⠉⣿⣿⣷⣦⣶⣽⣿⣿⠈⣿⣿⣿⣿⠏⢹⣷⣷⡅⢐ ⣔⢕⢥⢻⣿⡀⠈⠛⠛⠁⢠⣿⣿⣿⣿⣿⣿⣿⣿⡀⠈⠛⠛⠁⠄⣼⣿⣿⡇⢔ ⢕⢕⢽⢸⢟⢟⢖⢖⢤⣶⡟⢻⣿⡿⠻⣿⣿⡟⢀⣿⣦⢤⢤⢔⢞⢿⢿⣿⠁⢕ ⢕⢕⠅⣐⢕⢕⢕⢕⢕⣿⣿⡄⠛⢀⣦⠈⠛⢁⣼⣿⢗⢕⢕⢕⢕⢕⢕⡏⣘⢕ ⢕⢕⠅⢓⣕⣕⣕⣕⣵⣿⣿⣿⣾⣿⣿⣿⣿⣿⣿⣿⣷⣕⢕⢕⢕⢕⡵⢀⢕⢕ ⢑⢕⠃⡈⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⢃⢕⢕⢕ ⣆⢕⠄⢱⣄⠛⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠿⢁⢕⢕⠕⢁ ⣿⣦⡀⣿⣿⣷⣶⣬⣍⣛⣛⣛⡛⠿⠿⠿⠛⠛⢛⣛⣉⣭⣤⣂⢜⠕⢑⣡⣴⣿")).delete(delay=5)
 
-        if msg == "$towa":
+        if msg == "$loy":
             url_towa = "https://www.youtube.com/channel/UC1uv2Oq6kNxgATlCiez59hw"
             try:
               response = requests.get(url_towa)
@@ -176,13 +178,12 @@ async def on_ready():
 
               elif "{\"text\":\" waiting\"}" in response.text:
                   await message.channel.send(
-                      "Towa has a stream planned so prolly no.")
+                      "Towa-sama has a stream planned so prolly no.")
 
               else:
-                  await message.channel.send("Towa not streaming.")
-                  time.sleep(1)
+                  await message.channel.send("Towa-sama not streaming.")
                   await message.channel.send("Proceeding to ping Loy-kun!")
-                  time.sleep(2)
+                  time.sleep(1)
                   await message.channel.send("<@362632187943714846> play?")
             except: 
               pass
