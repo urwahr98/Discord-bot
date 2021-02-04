@@ -47,11 +47,14 @@ async def on_ready():
                 == 'on') and (str(message.author) != "nekoking98#3782"):
             return
 
-        if message.content.startswith('$test'):
-          emoji = '<:Sayori_yes:804639635564789771>'
-          if emoji:
-            await message.add_reaction(emoji)
-          # await( await message.channel.send(emoji)).delete(delay=3)
+        # if message.content.startswith('$test'):
+        #   emojilist = ['<a:towa:806768843585355787>','<a:towaaa:806784212811120650>']
+        #   await message.add_reaction(choice(emojilist))
+          # for emoji in message.guild.emojis:
+          #   print(str(emoji.id) + " : " + emoji.name)
+          # emoji = '<a:towa:806768843585355787>'
+          # if emoji:
+          #   await message.add_reaction(emoji)
 
         if message.content.startswith('$check'):
           text3 = msg.split('$check ')[-1]
@@ -127,11 +130,12 @@ async def on_ready():
             await(await message.channel.send("Serious la?")).delete(delay=5)
 
           if str(message.author) == "Loy-kun#9866":
-            emoji = '\N{THUMBS UP SIGN}'
-            await message.add_reaction(emoji)
+            emojilist = ['<a:towa:806768843585355787>','<a:towaaa:806784212811120650>']
+            await message.add_reaction(choice(emojilist))
 
           if str(message.author) == "Lexxy157#1516":
-            emoji = '<:kappapride:619936943815393291>'
+            emoji = '\N{THUMBS UP SIGN}'
+            # emoji = '<:kappapride:619936943815393291>'
             if emoji:
               await message.add_reaction(emoji)
 
