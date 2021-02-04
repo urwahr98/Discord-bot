@@ -38,6 +38,7 @@ async def on_ready():
     async def on_message(message):
         ran = random.randint(0, 19)
         msg = str(message.content)
+        msgL = msg.lower()
 
         if message.author == client.user:
             return
@@ -46,8 +47,20 @@ async def on_ready():
                 == 'on') and (str(message.author) != "nekoking98#3782"):
             return
 
-        # if message.content.startswith('$test'):
-        #   await( await message.channel.send("`$react x == y` for me to reply with y whenever i see x.")).delete(delay=3)
+        if message.content.startswith('$test'):
+          emoji = '<:Sayori_yes:804639635564789771>'
+          if emoji:
+            await message.add_reaction(emoji)
+          # await( await message.channel.send(emoji)).delete(delay=3)
+
+        if message.content.startswith('$check'):
+          text3 = msg.split('$check ')[-1]
+          if text3 in db.keys():
+            await message.channel.send(
+                    "The key `"+text3+"` exist in the database.")
+          else:
+            await message.channel.send(
+                    "The key `"+text3+"` does not exist in the database!")
 
         if message.content.startswith('$devon'):
             if db['devMode'] == 'off':
@@ -164,7 +177,7 @@ async def on_ready():
             await message.channel.send(
                     "Database cleared!")
 
-        if (msg.lower()).startswith('uwu'):
+        if (msgL).startswith('uwu'):
            await(await message.channel.send(
                     "⡆⣐⢕⢕⢕⢕⢕⢕⢕⢕⠅⢗⢕⢕⢕⢕⢕⢕⢕⠕⠕⢕⢕⢕⢕⢕⢕⢕⢕⢕ ⢐⢕⢕⢕⢕⢕⣕⢕⢕⠕⠁⢕⢕⢕⢕⢕⢕⢕⢕⠅⡄⢕⢕⢕⢕⢕⢕⢕⢕⢕ ⢕⢕⢕⢕⢕⠅⢗⢕⠕⣠⠄⣗⢕⢕⠕⢕⢕⢕⠕⢠⣿⠐⢕⢕⢕⠑⢕⢕⠵⢕ ⢕⢕⢕⢕⠁⢜⠕⢁⣴⣿⡇⢓⢕⢵⢐⢕⢕⠕⢁⣾⢿⣧⠑⢕⢕⠄⢑⢕⠅⢕ ⢕⢕⠵⢁⠔⢁⣤⣤⣶⣶⣶⡐⣕⢽⠐⢕⠕⣡⣾⣶⣶⣶⣤⡁⢓⢕⠄⢑⢅⢑ ⠍⣧⠄⣶⣾⣿⣿⣿⣿⣿⣿⣷⣔⢕⢄⢡⣾⣿⣿⣿⣿⣿⣿⣿⣦⡑⢕⢤⠱⢐ ⢠⢕⠅⣾⣿⠋⢿⣿⣿⣿⠉⣿⣿⣷⣦⣶⣽⣿⣿⠈⣿⣿⣿⣿⠏⢹⣷⣷⡅⢐ ⣔⢕⢥⢻⣿⡀⠈⠛⠛⠁⢠⣿⣿⣿⣿⣿⣿⣿⣿⡀⠈⠛⠛⠁⠄⣼⣿⣿⡇⢔ ⢕⢕⢽⢸⢟⢟⢖⢖⢤⣶⡟⢻⣿⡿⠻⣿⣿⡟⢀⣿⣦⢤⢤⢔⢞⢿⢿⣿⠁⢕ ⢕⢕⠅⣐⢕⢕⢕⢕⢕⣿⣿⡄⠛⢀⣦⠈⠛⢁⣼⣿⢗⢕⢕⢕⢕⢕⢕⡏⣘⢕ ⢕⢕⠅⢓⣕⣕⣕⣕⣵⣿⣿⣿⣾⣿⣿⣿⣿⣿⣿⣿⣷⣕⢕⢕⢕⢕⡵⢀⢕⢕ ⢑⢕⠃⡈⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⢃⢕⢕⢕ ⣆⢕⠄⢱⣄⠛⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠿⢁⢕⢕⠕⢁ ⣿⣦⡀⣿⣿⣷⣶⣬⣍⣛⣛⣛⡛⠿⠿⠿⠛⠛⢛⣛⣉⣭⣤⣂⢜⠕⢑⣡⣴⣿")).delete(delay=5)
 
@@ -174,7 +187,7 @@ async def on_ready():
               response = requests.get(url_towa)
 
               if "{\"text\":\" watching\"}" in response.text:
-                  await message.channel.send("Towa streaming so no.")
+                  await message.channel.send("Towa-sama currently streaming so no.")
 
               elif "{\"text\":\" waiting\"}" in response.text:
                   await message.channel.send(
@@ -207,17 +220,96 @@ async def on_ready():
           await message.channel.send("<@523783786123755532> 555~ HENSHIN!")
           await(await message.channel.send("https://media1.tenor.com/images/f2a87aed0599ff89817bcfa4d10486f5/tenor.gif?itemid=10467352")).delete(delay=15)
 
-        if "nene" in msg:
-          await(await message.channel.send("Is there a vtuber that could even possibly EVEN TOUCH Momosuzu Nene Let alone defeat her. And I'm not talking about Suzumomo Nene. I'm not talking about Super Nenechi either. Hell, I'm not even talking about Perfect Nenechi with God Steam (with the Ringfit Adventure), after eating gyoza for lunch. I’m also not talking about Nenemax 300k subs vtuber (which is capable of speaking Japanese, English and Spanish), her two wives Ina and Lamy and a third random tall guy clicking his tongue at her as he passes by. I'm definitely NOT talking about NENEMAXMAXMAXSTORONG with 4 parallel universe wives (Ina, Lamy, Suisei, Okayu), equipped with sexy bikini while paying her employees 4 billion yen per hour after having become the CEO of Neneproduction, capable of glitching Craftopia bosses to only target her and pranking Flare in Minecraft, and having eaten Haachama's gyoza. I'm talking about Super Hyper Ultra Ultimate Deluxe Perfect Amazing Shining God 東方不敗 Master Ginga Victory Strong Cute Beautiful Galaxy Baby 無限 無敵 無双 Nenechi with 4 wives, 4 Hololive auditions, 300k husbands, IQ 3 (π, 5G), Perfect Japanglish, and Spanish, while singing La Lion, getting her water stolen by Polka and Botan (but surprised her with gaming skills) and set herself on fire in Craftopia after having become the CEO of Nenepro who punches and kicks every employee, after having disconnected while singing Connect with Kiara, as well as having her name flipped into ƎИƎИ and turned into 3D cardboard, wearing a sexy bikini, after marathoning iCarly and VICTORIOUS and having eaten Haachama's gyoza while convincing Ame to trust her and having mastered singing Shiny Smiley Story")).delete(delay=15)
+        if "nene" in msgL:
+          await(await message.channel.send("Is there a vtuber that could even possibly EVEN TOUCH Momosuzu Nene Let alone defeat her. And I'm not talking about Suzumomo Nene. I'm not talking about Super Nenechi either. Hell, I'm not even talking about Perfect Nenechi with God Steam (with the Ringfit Adventure), after eating gyoza for lunch. I’m also not talking about Nenemax 300k subs vtuber (which is capable of speaking Japanese, English and Spanish), her two wives Ina and Lamy and a third random tall guy clicking his tongue at her as he passes by. I'm definitely NOT talking about NENEMAXMAXMAXSTORONG with 4 parallel universe wives (Ina, Lamy, Suisei, Okayu), equipped with sexy bikini while paying her employees 4 billion yen per hour after having become the CEO of Neneproduction, capable of glitching Craftopia bosses to only target her and pranking Flare in Minecraft, and having eaten Haachama's gyoza. I'm talking about Super Hyper Ultra Ultimate Deluxe Perfect Amazing Shining God 東方不敗 Master Ginga Victory Strong Cute Beautiful Galaxy Baby 無限 無敵 無双 Nenechi with 4 wives, 4 Hololive auditions, 300k husbands, IQ 3 (π, 5G), Perfect Japanglish, and Spanish, while singing La Lion, getting her water stolen by Polka and Botan (but surprised her with gaming skills) and set herself on fire in Craftopia after having become the CEO of Nenepro who punches and kicks every employee, after having disconnected while singing Connect with Kiara, as well as having her name flipped into ƎИƎИ and turned into 3D cardboard, wearing a sexy bikini, after marathoning iCarly and VICTORIOUS and having eaten Haachama's gyoza while convincing Ame to trust her and having mastered singing Shiny Smiley Story")).delete(delay=5)
 
-        if "glasses" in msg:
+        if "glasses" in msgL:
           await(await message.channel.send('Glasses are really versatile. First, you can have glasses-wearing girls take them off and suddenly become beautiful, or have girls wearing glasses flashing those cute grins, or have girls stealing the protagonist\'s glasses and putting them on like, "Haha, got your glasses!" That\'s just way too cute! Also, boys with glasses! I really like when their glasses have that suspicious looking gleam, and it\'s amazing how it can look really cool or just be a joke. I really like how it can fulfill all those abstract needs. Being able to switch up the styles and colors of glasses based on your mood is a lot of fun too! It\'s actually so much fun! You have those half rim glasses, or the thick frame glasses, everything! It\'s like you\'re enjoying all these kinds of glasses at a buffet. I really want Luna to try some on or Marine to try some on to replace her eyepatch. We really need glasses to become a thing in hololive and start selling them for HoloComi. Don\'t. You. Think. We. Really. Need. To. Officially. Give. Everyone. Glasses?')).delete(delay=5)
 
-        if "nigger" in msg:
+        if "nigger" in msgL:
           await message.channel.send('Not cool, <@'+ str(message.author.id) +">!")
 
-        if "weeb" in msg:
+        if "weeb" in msgL:
           await(await message.channel.send('Watashi wa :tongue: a :ok_hand: victim of :sweat_drops: cyberbullying. Everyday :calendar_spiral: someone :bust_in_silhouette: online :computer: calls :speaking_head: me :sob: a :ok_hand: "weeb" desu. :ok_hand: Watashi won\'t :no_entry_sign: stand :dash: for :eggplant: this. :point_left: 26 percent :keycap_ten: of :sweat_drops: bullying :joy: victims are :1234: chosen due to :sweat_drops: their :eggplant: race :middle_finger: or :person_tipping_hand: religion :kaaba: desu. :ok_hand: I :eye: may :calendar_spiral: look :eyes: like :sparkling_heart: a :ok_hand: basic :steam_locomotive: white :blond_haired_person: boy, :boy: but :peach: deep :scream: down :small_red_triangle_down: I :eye: am :clap: Nihongo desu. :ok_hand: Watashi religion :kaaba: is :sweat_drops: anime. :joy_cat: Anata wa :tongue: bullying :joy: me :sob: because :person_tipping_hand: of :sweat_drops: my :man: race :middle_finger: and :clap: religion :kaaba: desu :ok_hand: ka? Disgusting :stuck_out_tongue_closed_eyes: desu. :ok_hand: Anata should :cupid: be :bee: ashamed :flushed: of :sweat_drops: yourself, :rolling_eyes: pig. A :ok_hand: baka gaijin like :sparkling_heart: anata is :sweat_drops: probably :heart_eyes_cat: jealous :unamused: of :sweat_drops: my :man: race :middle_finger: and :clap: culture, cause :kiss: Nippon is :sweat_drops: more :poultry_leg: sugoi than :point_right: your :clap: shitty :poop: country :person_running: desu. :ok_hand: Watashi pity :cry: anata. You\'ll :point_right: never :person_gesturing_no: be :bee: Nihongo like :sparkling_heart: watashi. I\'m :cupid: a :ok_hand: weeb? Pfft. I :eye: AM :clap: AN :japanese_ogre: OTAKU DESU. :ok_hand: Educate yourself :rolling_eyes: on :on: nani a :ok_hand: "weeb" is :sweat_drops: before :joy: anata try :neutral_face: to :sweat_drops: insult :frowning: watashi desu. :ok_hand: I :eye: WILL :clap: NOT :no_entry_sign: BE :bee: CYBERBULLIED ANYMORE. :fire: REPORTED.')).delete(delay=3)
+
+        if "wowo" in msgL:
+          await message.channel.send("https://tenor.com/view/inugamikorone-korone-koronelfr-lfrhahaha-gif-19740883")
+
+        if "baka" in msgL:
+          with open('audio/bakatare.wav', 'rb') as fp:
+            await message.channel.send(file=discord.File(fp, 'bakatare.wav'))
+
+        if "nande" in msgL:
+          with open('audio/nande.mp3', 'rb') as fp:
+            await message.channel.send(file=discord.File(fp, 'nande.mp3'))
+
+        if "pekopeko" in msgL:
+          with open('audio/PekoPekoPekomischievous.mp3', 'rb') as fp:
+            await message.channel.send(file=discord.File(fp, 'pekopeko.mp3'))
+
+        if "degen" in msgL:
+          with open('audio/degenewates_haato.mp3', 'rb') as fp:
+            await message.channel.send(file=discord.File(fp, 'degen.mp3'))
+
+        if "arigathanks" in msgL:
+          with open('audio/akai-haato-arigathanks.mp3', 'rb') as fp:
+            await message.channel.send(file=discord.File(fp, 'arigathanks.mp3'))
+
+        if "cringe" in msgL:
+          with open('audio/amelia-watson-thats-pretty-cringe_1j8RUDZ.mp3', 'rb') as fp:
+            await message.channel.send(file=discord.File(fp, 'cringe.mp3'))
+
+        if "gas gas gas" in msgL:
+          with open('audio/gawr-gura-gas-gas-gas.mp3', 'rb') as fp:
+            await message.channel.send(file=discord.File(fp, 'gas_gas_gas.mp3'))
+        
+        if "no confidence" in msgL:
+          with open('audio/inugami-korone-have-confidence-no-confidence.mp3', 'rb') as fp:
+            await message.channel.send(file=discord.File(fp, 'no_confidence.mp3'))
+
+        if "yahoo" in msgL:
+          with open('audio/jacky-makan-makan-serambi-teruntum-mp3cut-mp3cut.mp3', 'rb') as fp:
+            await message.channel.send(file=discord.File(fp, 'yahoo.mp3'))
+
+        if "disgusting" in msgL:
+          with open('audio/korone-kimoi.mp3', 'rb') as fp:
+            await message.channel.send(file=discord.File(fp, 'kimoi.mp3'))
+
+        if "google" in msgL:
+          with open('audio/luna-ok-google.mp3', 'rb') as fp:
+            await message.channel.send(file=discord.File(fp, 'ok_google.mp3'))
+
+        if "naaa" in msgL:
+          with open('audio/lunaaaa.mp3', 'rb') as fp:
+            await message.channel.send(file=discord.File(fp, 'Naaaa.mp3'))
+
+        if "faq" in msgL:
+          with open('audio/sakura-miko-faq.mp3', 'rb') as fp:
+            await message.channel.send(file=discord.File(fp, 'faq.mp3'))
+        
+        if "yabe" in msgL:
+          with open('audio/shirakami-fubuki-yabe.mp3', 'rb') as fp:
+            await message.channel.send(file=discord.File(fp, 'yabe.mp3'))
+
+        if "bitch" in msgL:
+          with open('audio/shutup-bitch-peko.mp3', 'rb') as fp:
+            await message.channel.send(file=discord.File(fp, 'shut_up.mp3'))
+
+        if "yabai" in msgL:
+          with open('audio/uruha-rushia-yabai-yaaaaaaaaaaa.mp3', 'rb') as fp:
+            await message.channel.send(file=discord.File(fp, 'yabai.mp3'))
+
+        if "sexy" in msgL:
+          with open('audio/wowowow-pekora.mp3', 'rb') as fp:
+            await message.channel.send(file=discord.File(fp, 'sexy.mp3'))
+
+        if "yagoo" in msgL:
+          with open('audio/yagoo-is-best-girl.mp3', 'rb') as fp:
+            await message.channel.send(file=discord.File(fp, 'best_grill.mp3'))
+
+        
+
+        
 
 
 
