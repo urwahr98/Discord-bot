@@ -56,14 +56,7 @@ async def on_ready():
           # if emoji:
           #   await message.add_reaction(emoji)
 
-        if message.content.startswith('$check'):
-          text3 = msg.split('$check ')[-1]
-          if text3 in db.keys():
-            await message.channel.send(
-                    "The key `"+text3+"` exist in the database.")
-          else:
-            await message.channel.send(
-                    "The key `"+text3+"` does not exist in the database!")
+        
 
         if message.content.startswith('$devon'):
             if db['devMode'] == 'off':
@@ -84,6 +77,20 @@ async def on_ready():
                     type=discord.ActivityType.watching, name='Chino mandi'))
             else:
                 await message.channel.send("Dev Mode is already Off!")
+
+        if message.content.startswith('$check'):
+          text3 = msg.split('$check ')[-1]
+          if text3 in db.keys():
+            await message.channel.send(
+                    "The key `"+text3+"` exist in the database.")
+          else:
+            await message.channel.send(
+                    "The key `"+text3+"` does not exist in the database!")
+
+        if message.content.startswith('$easteregg'):
+          await message.channel.send(
+                    "Try send a message with this keyword included :"+
+                    "\nnene, glasses, nigger, weeb, wowo, baka, nande, pekopeko, degen, arigathanks, cringe, gas gas gas, no confidence, yahoo, disgusting, google, naaa, faq, yabe, bitch, yabai, sexy, yagoo.")
 
         if message.content.startswith('$help'):
           await message.channel.send("`$react x == y` for me to reply with y whenever i see x."
@@ -130,14 +137,14 @@ async def on_ready():
             await(await message.channel.send("Serious la?")).delete(delay=5)
 
           if str(message.author) == "Loy-kun#9866":
-            emojilist = ['<a:towa:806768843585355787>','<a:towaaa:806784212811120650>']
+            emojilist = ['<a:towa:806768843585355787>','<a:towaaa:806784212811120650>', '\N{THUMBS UP SIGN}']
             await message.add_reaction(choice(emojilist))
 
-          if str(message.author) == "Lexxy157#1516":
-            emoji = '\N{THUMBS UP SIGN}'
-            # emoji = '<:kappapride:619936943815393291>'
-            if emoji:
-              await message.add_reaction(emoji)
+          # if str(message.author) == "Lexxy157#1516":
+          #   emoji = '\N{THUMBS UP SIGN}'
+          #   # emoji = '<:kappapride:619936943815393291>'
+          #   if emoji:
+          #     await message.add_reaction(emoji)
 
 
         if message.content.startswith('$react '):
