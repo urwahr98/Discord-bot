@@ -47,9 +47,10 @@ async def on_message(message):
             == 'on') and (str(message.author) != "nekoking98#3782"):
         return
 
-    # if message.content.startswith('$test'):
-    #   emojilist = ['<a:towa:806768843585355787>','<a:towaaa:806784212811120650>']
-    #   await message.add_reaction(choice(emojilist))
+    if message.content.startswith('$test'):
+      await message.channel.send("`"+msg+"`")
+      # emojilist = ['<a:towa:806768843585355787>','<a:towaaa:806784212811120650>']
+      # await message.add_reaction(choice(emojilist))
       # for emoji in message.guild.emojis:
       #   print(str(emoji.id) + " : " + emoji.name)
       # emoji = '<a:towa:806768843585355787>'
@@ -120,11 +121,12 @@ async def on_message(message):
     if ran == 1:
 
       if str(message.author) == "po_sama#8588":
-        await(await message.channel.send("Ye la Po")).delete(delay=5)
+        poreply = ["Ye la Po", "Apa apa je la Po.", "Asalkan kau happy Po.", "Hidup kau Po.", "Congrats!", "Nice one Po!", "No pressure Po.", "Next time."]
+        await(await message.channel.send(poreply)).delete(delay=10)
 
       if str(message.author) == "Amree#2113":
         amreelist = ["です!", "ですね~", "Betul betul betul.", "ね~", "うんうん", "うむ!", "まさか?!", "すごい", "なる程!"]
-        await(await message.channel.send(choice(amreelist))).delete(delay=5)
+        await(await message.channel.send(choice(amreelist))).delete(delay=10)
 
       if str(message.author) == "nekoking98#3782":
         try:
@@ -135,7 +137,8 @@ async def on_message(message):
           pass
 
       if str(message.author) == "Murada#5664":
-        await(await message.channel.send("Serious la?")).delete(delay=5)
+        raulreply = ["Serious la?", "True.", "Same.", "I agree", "Me too.", "Sure.", "You do you.", "Are you sure?", "Oh really?"]
+        await(await message.channel.send(choice(raulreply))).delete(delay=10)
 
       if str(message.author) == "Loy-kun#9866":
         emojilist = ['<a:towa:806768843585355787>','<a:towaaa:806784212811120650>', '\N{THUMBS UP SIGN}']
@@ -156,6 +159,10 @@ async def on_message(message):
                                     '\n i reply with this: `' + remove2[-1]+"`")).delete(delay=5)
         await message.channel.send(
             'Database succesfully updated.')
+
+    if msgL == "amree" or msg == "<@!797753144641716245>":
+      replieslist = ["Ye?", "Padia?", "Awat?", "Hang nak pa?", "Que?", "Pardon?", "Yo!", "Nani?", "Wassup", "At your service, my lady.", "I like Abby.", "...", "Naruhodo ne!", "Hai, Amree desu!", "Amree dayo!"]
+      await(await message.channel.send(choice(replieslist))).delete(delay=5)
 
     if msg in db.keys():
         reply = db[msg]
@@ -212,10 +219,6 @@ async def on_message(message):
               await message.channel.send("<@362632187943714846> play?")
         except: 
           pass
-
-    if msgL == "amree":
-      replieslist = ["Ye?", "Padia?", "Awat?", "Hang nak pa?", "Que?", "Pardon?", "Yo!", "Nani?", "Wassup", "At your service, my lady.", "I like Abby.", "...", "Naruhodo ne!", "Hai, Amree desu!", "Amree dayo!"]
-      await(await message.channel.send(choice(replieslist))).delete(delay=5)
         
     if msg == "$cs":
       await message.channel.send("Assembling Kamen Rider!")
