@@ -36,7 +36,7 @@ async def on_ready():
 
 @client.event
 async def on_message(message):
-    ran = random.randint(0, 19)
+    ran = random.randint(0, 49)
     msg = str(message.content)
     msgL = msg.lower()
 
@@ -48,7 +48,9 @@ async def on_message(message):
         return
 
     if message.content.startswith('$test'):
-      await message.channel.send("`"+msg+"`")
+      for key in db.keys():
+        await message.channel.send("`"+ key + "`\n" )
+      # await message.channel.send("`"+msg+"`")
       # emojilist = ['<a:towa:806768843585355787>','<a:towaaa:806784212811120650>']
       # await message.add_reaction(choice(emojilist))
       # for emoji in message.guild.emojis:
@@ -96,7 +98,7 @@ async def on_message(message):
     if message.content.startswith('$help'):
       await message.channel.send("`$react x == y` for me to reply with y whenever i see x."
                                   +"\n`$del x` for me to delete x from reply list."
-                                  +"\n`$list` for me to list all what I will reply."
+                                  +"\n`$list` or `$list_` for me to list all what I will reply."
                                   +"\n`$romaji x` for me to turn x from jp to romaji."
                                   +"\n`$decide x or y or ..` for me to decide which is the best choice."
                                   +"\n`$loy` to ping loi."
@@ -114,15 +116,16 @@ async def on_message(message):
         await message.channel.send("Conversion failed!")
 
     if message.content.startswith('$decide'):
+      sentence = ["my calculation.", "the movement of the stars.", "chaos theory.", "the anime I watched yesterday.", "my feeling.", "my best friend, Bagak!", "your mother.", "dy/dx = 0.", "the photosynthesis of the choices!", "what's best for you."]
       listword = msg.split("$decide ")[-1]
       listword = listword.split(" or ")
-      await message.channel.send("I think that "+ choice(listword) + " is the best choice here!")
+      await message.channel.send("I think that "+ choice(listword) + " is the best choice here || with "+ str(random.randint(1,100)) +"% certainty according to "+ choice(sentence)+"||")
 
     if ran == 1:
 
       if str(message.author) == "po_sama#8588":
         poreply = ["Ye la Po", "Apa apa je la Po.", "Asalkan kau happy Po.", "Hidup kau Po.", "Congrats!", "Nice one Po!", "No pressure Po.", "Next time."]
-        await(await message.channel.send(poreply)).delete(delay=10)
+        await(await message.channel.send(choice(poreply))).delete(delay=10)
 
       if str(message.author) == "Amree#2113":
         amreelist = ["です!", "ですね~", "Betul betul betul.", "ね~", "うんうん", "うむ!", "まさか?!", "すごい", "なる程!"]
@@ -174,6 +177,9 @@ async def on_message(message):
         else:
             list = '['
             for key in db.keys():
+              if message.content.startswith('$list_'):
+                list = list + "`" + key + '`, '
+              else:
                 list = list + key + ', '
             list = list[:-2]
             list = list + ']'
