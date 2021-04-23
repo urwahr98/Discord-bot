@@ -155,45 +155,71 @@ async def on_message(message):
 
 
     if message.content.startswith('$react '):
-        remove1 = msg.split('$react ')[-1]
-        remove2 = remove1.split(' == ')
-        db[remove2[0].strip()] = remove2[-1].strip()
-        await(await message.channel.send("When i see this: `" + remove2[0] + "`"
-                                    '\n i reply with this: `' + remove2[-1]+"`")).delete(delay=5)
-        await message.channel.send(
-            'Database succesfully updated.')
+      remove1 = msg.split('$react ')[-1]
+      remove2 = remove1.split(' == ')
+      db[remove2[0].strip()] = remove2[-1].strip()
+      await(await message.channel.send("When i see this: `" + remove2[0] + "`"
+                                  '\n i reply with this: `' + remove2[-1]+"`")).delete(delay=5)
+      await message.channel.send(
+          'Database succesfully updated.')
 
     if msgL == "amree" or msg == "<@!797753144641716245>":
       replieslist = ["Ye?", "Padia?", "Awat?", "Hang nak pa?", "Que?", "Pardon?", "Yo!", "Nani?", "Wassup", "At your service, my lady.", "I like Abby.", "...", "Naruhodo ne!", "Hai, Amree desu!", "Amree dayo!"]
       await(await message.channel.send(choice(replieslist))).delete(delay=5)
 
     if msg in db.keys():
-        reply = db[msg]
-        return await message.channel.send(reply)
+      reply = db[msg]
+      return await message.channel.send(reply)
 
     if message.content.startswith('$list'):
-        if not db.keys():
-            await message.channel.send("No Available Reply!")
-        else:
-            list = '['
-            for key in db.keys():
-              if message.content.startswith('$list_'):
-                list = list + "`" + key + '`, '
-              else:
-                list = list + key + ', '
-            list = list[:-2]
-            list = list + ']'
-            await message.channel.send(list)
+      if not db.keys():
+          await message.channel.send("No Available Reply!")
+      else:
+          list = '['
+          for key in db.keys():
+            if message.content.startswith('$list_'):
+              list = list + "`" + key + '`, '
+            else:
+              list = list + key + ', '
+          list = list[:-2]
+          list = list + ']'
+          await message.channel.send(list)
 
     if message.content.startswith('$del'):
-        remove1 = msg.split('$del ')[-1]
-        if remove1 in db.keys():
-            del db[remove1]
-            await message.channel.send(
-                "Reply Successfully deleted!")
-        else:
-            await message.channel.send(
-                "Could not find `"+ remove1 + "` in database!")
+      remove1 = msg.split('$del ')[-1]
+      if remove1 in db.keys():
+          del db[remove1]
+          await message.channel.send(
+              "Reply Successfully deleted!")
+      else:
+          await message.channel.send(
+              "Could not find `"+ remove1 + "` in database!")
+
+    if message.content.startswith('$wait'):
+      await message.delete()
+      icon = message.author.avatar_url
+      rawUserInput = msg.split('$wait ')[-1]
+      await(await message.channel.send(
+              "Sure! How many hours do you wanna delay it?")).delete(delay=13)
+      try:
+        newUserInput = await client.wait_for("message", timeout=30)
+        newUserInput = newUserInput.content.strip()
+        await(await message.channel.send(
+              "Sending your message in approximately " + newUserInput + " hours!")).delete(delay=5)
+        totalsec = float(newUserInput)*3600
+        await asyncio.sleep(int(totalsec))
+        await message.channel.send("Hear, Hear! A message from around " + newUserInput + " hours ago brought to the future!")
+        await asyncio.sleep(3)
+        embed = discord.Embed(description = rawUserInput)
+        embed.set_author(name = str(message.author), icon_url = icon)
+        await message.channel.send(embed=embed)
+        if "http" in rawUserInput:
+          await message.channel.send(rawUserInput)
+
+      except asyncio.TimeoutError:
+        await message.channel.send("Sorry, you didn't reply in time!")
+
+  
 
     if message.content.startswith('$clear'):
         for key in db.keys():
@@ -247,6 +273,9 @@ async def on_message(message):
 
     if "nene" in msgL:
       await(await message.channel.send("Is there a vtuber that could even possibly EVEN TOUCH Momosuzu Nene Let alone defeat her. And I'm not talking about Suzumomo Nene. I'm not talking about Super Nenechi either. Hell, I'm not even talking about Perfect Nenechi with God Steam (with the Ringfit Adventure), after eating gyoza for lunch. I’m also not talking about Nenemax 300k subs vtuber (which is capable of speaking Japanese, English and Spanish), her two wives Ina and Lamy and a third random tall guy clicking his tongue at her as he passes by. I'm definitely NOT talking about NENEMAXMAXMAXSTORONG with 4 parallel universe wives (Ina, Lamy, Suisei, Okayu), equipped with sexy bikini while paying her employees 4 billion yen per hour after having become the CEO of Neneproduction, capable of glitching Craftopia bosses to only target her and pranking Flare in Minecraft, and having eaten Haachama's gyoza. I'm talking about Super Hyper Ultra Ultimate Deluxe Perfect Amazing Shining God 東方不敗 Master Ginga Victory Strong Cute Beautiful Galaxy Baby 無限 無敵 無双 Nenechi with 4 wives, 4 Hololive auditions, 300k husbands, IQ 3 (π, 5G), Perfect Japanglish, and Spanish, while singing La Lion, getting her water stolen by Polka and Botan (but surprised her with gaming skills) and set herself on fire in Craftopia after having become the CEO of Nenepro who punches and kicks every employee, after having disconnected while singing Connect with Kiara, as well as having her name flipped into ƎИƎИ and turned into 3D cardboard, wearing a sexy bikini, after marathoning iCarly and VICTORIOUS and having eaten Haachama's gyoza while convincing Ame to trust her and having mastered singing Shiny Smiley Story")).delete(delay=5)
+
+    if "kelantan" in msgL:
+      await(await message.channel.send("Kalu beci sangat nge ore Kelate ikut mu la. Ado ko ore Kelate caro pasa sekmu, tadok kei? Sore keno, abih sor Kelate mu cop jahak. Eh, nok oyak sor karo. Ore Kelate dok berlapa nok ko sekmu eh. Mu kalo teringin makae budu mu buleh DM aku sek kito bley oyak")).delete(delay=5)
 
     if "glasses" in msgL:
       await(await message.channel.send('Glasses are really versatile. First, you can have glasses-wearing girls take them off and suddenly become beautiful, or have girls wearing glasses flashing those cute grins, or have girls stealing the protagonist\'s glasses and putting them on like, "Haha, got your glasses!" That\'s just way too cute! Also, boys with glasses! I really like when their glasses have that suspicious looking gleam, and it\'s amazing how it can look really cool or just be a joke. I really like how it can fulfill all those abstract needs. Being able to switch up the styles and colors of glasses based on your mood is a lot of fun too! It\'s actually so much fun! You have those half rim glasses, or the thick frame glasses, everything! It\'s like you\'re enjoying all these kinds of glasses at a buffet. I really want Luna to try some on or Marine to try some on to replace her eyepatch. We really need glasses to become a thing in hololive and start selling them for HoloComi. Don\'t. You. Think. We. Really. Need. To. Officially. Give. Everyone. Glasses?')).delete(delay=5)
