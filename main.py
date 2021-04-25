@@ -25,6 +25,7 @@ async def reply(message):
             reply = db[message.content]
             return await message.channel.send(reply)
 
+colorList = [discord.Color.blue(), discord.Color.dark_blue(), discord.Color.purple(), discord.Color.red(), discord.Color.gold(), discord.Color.dark_gold(), discord.Color.dark_green(), discord.Color.magenta(), discord.Color.teal(), discord.Color.orange(), discord.Color.dark_red()]
 
 @client.event
 async def on_ready():
@@ -90,10 +91,10 @@ async def on_message(message):
         await message.channel.send(
                 "The key `"+text3+"` does not exist in the database!")
 
-    if message.content.startswith('$easteregg'):
+    if message.content.startswith('$ee'):
       await message.channel.send(
                 "Try send a message with this keyword included :"+
-                "\nuwu, nene, glasses, nigger, weeb, wowo, baka, nande, pekopeko, degen, arigathanks, cringe, gas gas gas, no confidence, yahoo, disgusting, ok google, naaa, faq, yabe, shut up bitch, yabai, sexy, yagoo.")
+                "\nuwu, nene, glasses, nigger, weeb, wowo, baka, nande, pekopeko, degen, arigathanks, cringe, gas gas gas, no confidence, yahoo, disgusting, ok google, naaa, faq, yabe, shut up bitch, yabai, sexy, yagoo, pizza, okiro.")
 
     if message.content.startswith('$help'):
       await message.channel.send("`$react x == y` for me to reply with y whenever i see x."
@@ -102,7 +103,10 @@ async def on_message(message):
                                   +"\n`$romaji x` for me to turn x from jp to romaji."
                                   +"\n`$decide x or y or ..` for me to decide which is the best choice."
                                   +"\n`$loy` to ping loi."
-                                  +"\n`$cs` to summon Kamen Rider.")
+                                  +"\n`$cs` to summon Kamen Rider."
+                                  +"\n`$delay msg` to put a delay in your message by hours."
+                                  +"\n`$em msg` to put your message as embed."
+                                  +"\n`$ee` for easter egg.")
 
     if message.content.startswith('$romaji'):
       text = msg.split('$romaji ')[-1]
@@ -185,7 +189,7 @@ async def on_message(message):
           list = list + ']'
           await message.channel.send(list)
 
-    if message.content.startswith('$del'):
+    if message.content.startswith('$del '):
       remove1 = msg.split('$del ')[-1]
       if remove1 in db.keys():
           del db[remove1]
@@ -195,10 +199,10 @@ async def on_message(message):
           await message.channel.send(
               "Could not find `"+ remove1 + "` in database!")
 
-    if message.content.startswith('$wait'):
+    if message.content.startswith('$delay'):
       await message.delete()
       icon = message.author.avatar_url
-      rawUserInput = msg.split('$wait ')[-1]
+      rawUserInput = msg.split('$delay ')[-1]
       await(await message.channel.send(
               "Sure! How many hours do you wanna delay it?")).delete(delay=13)
       try:
@@ -210,8 +214,9 @@ async def on_message(message):
         await asyncio.sleep(int(totalsec))
         await message.channel.send("Hear, Hear! A message from around " + newUserInput + " hours ago brought to the future!")
         await asyncio.sleep(3)
-        embed = discord.Embed(description = rawUserInput)
-        embed.set_author(name = str(message.author), icon_url = icon)
+        embed = discord.Embed(description = rawUserInput +"\n___", color=choice(colorList))
+        embed.set_author(name = str(message.author.display_name), icon_url = icon)
+        embed.set_footer(text="-"+str(message.author))
         await message.channel.send(embed=embed)
         if "http" in rawUserInput:
           await message.channel.send(rawUserInput)
@@ -219,6 +224,17 @@ async def on_message(message):
       except asyncio.TimeoutError:
         await message.channel.send("Sorry, you didn't reply in time!")
 
+    if message.content.startswith('$em'):
+      await message.delete()
+      icon = message.author.avatar_url
+      rawUserInput = msg.split('$em ')[-1]
+      embed = discord.Embed(description = rawUserInput +"\n___", color=choice(colorList))
+      embed.set_author(name = str(message.author.display_name), icon_url = icon)
+      embed.set_footer(text="-"+str(message.author))
+      # embed.add_field(name="__", value="__", inline=False)
+      await message.channel.send(embed=embed)
+      if "http" in rawUserInput:
+        await message.channel.send(rawUserInput)
   
 
     if message.content.startswith('$clear'):
@@ -291,35 +307,35 @@ async def on_message(message):
 
     if "baka" in msgL:
       with open('audio/bakatare.wav', 'rb') as fp:
-        await message.channel.send(file=discord.File(fp, 'bakatare.wav'))
+        await message.channel.send(file=discord.File(fp, 'Pekora_bakatare.wav'))
 
     if "nande" in msgL:
       with open('audio/nande.mp3', 'rb') as fp:
-        await message.channel.send(file=discord.File(fp, 'nande.mp3'))
+        await message.channel.send(file=discord.File(fp, 'Rushia_nande.mp3'))
 
     if "pekopeko" in msgL:
       with open('audio/PekoPekoPekomischievous.mp3', 'rb') as fp:
-        await message.channel.send(file=discord.File(fp, 'pekopeko.mp3'))
+        await message.channel.send(file=discord.File(fp, 'Pekora_pekopeko.mp3'))
 
     if "degen" in msgL:
       with open('audio/degenewates_haato.mp3', 'rb') as fp:
-        await message.channel.send(file=discord.File(fp, 'degen.mp3'))
+        await message.channel.send(file=discord.File(fp, 'Haachama_degenelates.mp3'))
 
     if "arigathanks" in msgL:
       with open('audio/akai-haato-arigathanks.mp3', 'rb') as fp:
-        await message.channel.send(file=discord.File(fp, 'arigathanks.mp3'))
+        await message.channel.send(file=discord.File(fp, 'Haachama_arigathanks.mp3'))
 
     if "cringe" in msgL:
       with open('audio/amelia-watson-thats-pretty-cringe_1j8RUDZ.mp3', 'rb') as fp:
-        await message.channel.send(file=discord.File(fp, 'cringe.mp3'))
+        await message.channel.send(file=discord.File(fp, 'Ame_cringe.mp3'))
 
     if "gas gas gas" in msgL:
       with open('audio/gawr-gura-gas-gas-gas.mp3', 'rb') as fp:
-        await message.channel.send(file=discord.File(fp, 'gas_gas_gas.mp3'))
+        await message.channel.send(file=discord.File(fp, 'Gura_gas_gas_gas.mp3'))
     
     if "no confidence" in msgL:
       with open('audio/inugami-korone-have-confidence-no-confidence.mp3', 'rb') as fp:
-        await message.channel.send(file=discord.File(fp, 'no_confidence.mp3'))
+        await message.channel.send(file=discord.File(fp, 'Korone_no_confidence.mp3'))
 
     if "yahoo" in msgL:
       with open('audio/jacky-makan-makan-serambi-teruntum-mp3cut-mp3cut.mp3', 'rb') as fp:
@@ -327,39 +343,47 @@ async def on_message(message):
 
     if "disgusting" in msgL:
       with open('audio/korone-kimoi.mp3', 'rb') as fp:
-        await message.channel.send(file=discord.File(fp, 'kimoi.mp3'))
+        await message.channel.send(file=discord.File(fp, 'Korone_kimoi.mp3'))
 
     if "ok google" in msgL:
       with open('audio/luna-ok-google.mp3', 'rb') as fp:
-        await message.channel.send(file=discord.File(fp, 'ok_google.mp3'))
+        await message.channel.send(file=discord.File(fp, 'Luna_ok_google.mp3'))
 
     if "naaa" in msgL:
       with open('audio/lunaaaa.mp3', 'rb') as fp:
-        await message.channel.send(file=discord.File(fp, 'Naaaa.mp3'))
+        await message.channel.send(file=discord.File(fp, 'Luna_Naaaa.mp3'))
 
     if "faq" in msgL:
       with open('audio/sakura-miko-faq.mp3', 'rb') as fp:
-        await message.channel.send(file=discord.File(fp, 'faq.mp3'))
+        await message.channel.send(file=discord.File(fp, 'Miko_faq.mp3'))
     
     if "yabe" in msgL:
       with open('audio/shirakami-fubuki-yabe.mp3', 'rb') as fp:
-        await message.channel.send(file=discord.File(fp, 'yabe.mp3'))
+        await message.channel.send(file=discord.File(fp, 'FBK_yabe.mp3'))
 
     if "shut up bitch" in msgL:
       with open('audio/shutup-bitch-peko.mp3', 'rb') as fp:
-        await message.channel.send(file=discord.File(fp, 'shut_up.mp3'))
+        await message.channel.send(file=discord.File(fp, 'Pkora_shut_up.mp3'))
 
     if "yabai" in msgL:
       with open('audio/uruha-rushia-yabai-yaaaaaaaaaaa.mp3', 'rb') as fp:
-        await message.channel.send(file=discord.File(fp, 'yabai.mp3'))
+        await message.channel.send(file=discord.File(fp, 'Rushia_yabai.mp3'))
 
     if "sexy" in msgL:
       with open('audio/wowowow-pekora.mp3', 'rb') as fp:
-        await message.channel.send(file=discord.File(fp, 'sexy.mp3'))
+        await message.channel.send(file=discord.File(fp, 'Pekora_sexy.mp3'))
 
     if "yagoo" in msgL:
       with open('audio/yagoo-is-best-girl.mp3', 'rb') as fp:
-        await message.channel.send(file=discord.File(fp, 'best_grill.mp3'))
+        await message.channel.send(file=discord.File(fp, 'Polka_best_grill.mp3'))
+
+    if "pizza" in msgL:
+      with open('audio/pepeloni.mp3', 'rb') as fp:
+        await message.channel.send(file=discord.File(fp, 'Haachama_pepeloni.mp3'))
+
+    if "okiro" in msgL:
+      with open('audio/Rushia_Okiro_Hentai.mp3', 'rb') as fp:
+        await message.channel.send(file=discord.File(fp, 'Rushia_Okiro.mp3'))
 
         
 
