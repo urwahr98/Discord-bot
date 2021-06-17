@@ -12,20 +12,32 @@ import pykakasi
 kks = pykakasi.kakasi()
 
 client = discord.Client()
+client.sniped_messages = {}
 
 def mess_up(message):
-    return ''.join(choice((str.upper, str.lower))(c) for c in message)
-
+  return ''.join(choice((str.upper, str.lower))(c) for c in message)
 
 async def reply(message):
-    if message.author == client.user:
-        return
+  if message.author == client.user:
+      return
 
-        if message.content in db.keys():
-            reply = db[message.content]
-            return await message.channel.send(reply)
+  if message.content in db.keys():
+      reply = db[message.content]
+      return await message.channel.send(reply)
 
-colorList = [discord.Color.blue(), discord.Color.dark_blue(), discord.Color.purple(), discord.Color.red(), discord.Color.gold(), discord.Color.dark_gold(), discord.Color.dark_green(), discord.Color.magenta(), discord.Color.teal(), discord.Color.orange(), discord.Color.dark_red()]
+colorList = [discord.Color.blue(), discord.Color.dark_blue(), discord.Color.purple(), discord.Color.dark_purple(), discord.Color.red(), discord.Color.gold(), discord.Color.dark_gold(), discord.Color.green(), discord.Color.dark_green(), discord.Color.magenta(), discord.Color.teal(), discord.Color.orange(), discord.Color.dark_red()]
+
+deleted_msg = None
+
+async def embedMSG(message):
+  if not message.attachments and message.reference is None:
+    await message.delete()
+    embed = discord.Embed(description = str(message.content) +"\n___", color=choice(colorList))
+    embed.set_author(name = str(message.author.display_name), icon_url = message.author.avatar_url)
+    embed.set_footer(text="-"+str(message.author.name))
+    await message.channel.send(embed=embed)
+    if "http" in str(message.content):
+      await message.channel.send(str(message.content))
 
 @client.event
 async def on_ready():
@@ -33,10 +45,11 @@ async def on_ready():
     db['devMode'] = 'off'
 
     await client.change_presence(activity=discord.Activity(
-        type=discord.ActivityType.watching, name='Chino mandi'))
+        type=discord.ActivityType.watching, name='Ohayo Sekai GM'))
 
 @client.event
 async def on_message(message):
+
     ran = random.randint(0, 49)
     msg = str(message.content)
     msgL = msg.lower()
@@ -48,10 +61,10 @@ async def on_message(message):
             == 'on') and (str(message.author) != "nekoking98#3782"):
         return
 
+    
     if message.content.startswith('$test'):
-      for key in db.keys():
-        await message.channel.send("`"+ key + "`\n" )
-      # await message.channel.send("`"+msg+"`")
+      if "wtv" in str(message.author.roles):
+        await message.channel.send(message.author.roles)
       # emojilist = ['<a:towa:806768843585355787>','<a:towaaa:806784212811120650>']
       # await message.add_reaction(choice(emojilist))
       # for emoji in message.guild.emojis:
@@ -59,8 +72,6 @@ async def on_message(message):
       # emoji = '<a:towa:806768843585355787>'
       # if emoji:
       #   await message.add_reaction(emoji)
-
-    
 
     if message.content.startswith('$devon'):
         if db['devMode'] == 'off':
@@ -81,6 +92,12 @@ async def on_message(message):
                 type=discord.ActivityType.watching, name='Chino mandi'))
         else:
             await message.channel.send("Dev Mode is already Off!")
+    
+    # if "🐷" in str(message.author.roles):
+    #   try:
+    #     await embedMSG(message)
+    #   except:
+    #     pass
 
     if message.content.startswith('$check'):
       text3 = msg.split('$check ')[-1]
@@ -91,10 +108,36 @@ async def on_message(message):
         await message.channel.send(
                 "The key `"+text3+"` does not exist in the database!")
 
+    if message.content.startswith('pls snipe'):
+
+      try: 
+        
+        contents, author, channel_name, time = client.sniped_messages[message.guild.id]
+      except:
+        await message.channel.send(
+                "Nothing to snipe!")
+        return
+      
+      embed = discord.Embed(description=contents, color=colorList, timestamp=time)
+      embed.set_author(name=f"{author.name}#{author.discriminator}", icon_url=author.avatar_url)
+      embed.set_footer(text= f"Deleted in : #{channel_name}")
+      await message.channel.send(embed=embed)
+      client.sniped_messages[message.guild.id] = {}
+
+
+
     if message.content.startswith('$ee'):
       await message.channel.send(
                 "Try send a message with this keyword included :"+
                 "\nuwu, nene, glasses, nigger, weeb, wowo, baka, nande, pekopeko, degen, arigathanks, cringe, gas gas gas, no confidence, yahoo, disgusting, ok google, naaa, faq, yabe, shut up bitch, yabai, sexy, yagoo, pizza, okiro.")
+
+    if message.content.startswith('$selfie'):
+      if msg == "$selfie":
+        await message.channel.send(message.author.avatar_url)
+      else:
+       for user in message.mentions:
+        await message.channel.send(user.avatar_url)
+
 
     if message.content.startswith('$help'):
       await message.channel.send("`$react x == y` for me to reply with y whenever i see x."
@@ -106,6 +149,7 @@ async def on_message(message):
                                   +"\n`$cs` to summon Kamen Rider."
                                   +"\n`$delay msg` to put a delay in your message by hours."
                                   +"\n`$em msg` to put your message as embed."
+                                  +"\n`$selfie @someone` to get their profile picture." 
                                   +"\n`$ee` for easter egg.")
 
     if message.content.startswith('$romaji'):
@@ -127,25 +171,23 @@ async def on_message(message):
 
     if ran == 1:
 
-      if str(message.author) == "po_sama#8588":
-        poreply = ["Ye la Po", "Apa apa je la Po.", "Asalkan kau happy Po.", "Hidup kau Po.", "Congrats!", "Nice one Po!", "No pressure Po.", "Next time."]
-        await(await message.channel.send(choice(poreply))).delete(delay=10)
+      # if str(message.author) == "po_sama#8588":
+      #   poreply = ["Ye la Po", "Apa apa je la Po.", "Asalkan kau happy Po.", "Hidup kau Po.", "Congrats!", "Nice one Po!", "No pressure Po.", "Next time."]
+      #   await(await message.channel.send(choice(poreply))).delete(delay=10)
 
       if str(message.author) == "Amree#2113":
         amreelist = ["です!", "ですね~", "Betul betul betul.", "ね~", "うんうん", "うむ!", "まさか?!", "すごい", "なる程!"]
         await(await message.channel.send(choice(amreelist))).delete(delay=10)
 
-      if str(message.author) == "nekoking98#3782":
-        try:
-          msg = mess_up(msg)
-          msg = "> "+msg
-          await(await message.channel.send(msg)).delete(delay=5)
-        except:
-          pass
+      # if str(message.author) == "nekoking98#3782":
+      #   try:
+      #     await embedMSG(message)
+      #   except:
+      #     pass
 
-      if str(message.author) == "Murada#5664":
-        raulreply = ["Serious la?", "True.", "Same.", "I agree", "Me too.", "Sure.", "You do you.", "Are you sure?", "Oh really?"]
-        await(await message.channel.send(choice(raulreply))).delete(delay=10)
+      # if str(message.author) == "Murada#5664":
+      #   raulreply = ["Serious la?", "True.", "Same.", "I agree", "Me too.", "Sure.", "You do you.", "Are you sure?", "Oh really?"]
+      #   await(await message.channel.send(choice(raulreply))).delete(delay=10)
 
       if str(message.author) == "Loy-kun#9866":
         emojilist = ['<a:towa:806768843585355787>','<a:towaaa:806784212811120650>', '\N{THUMBS UP SIGN}']
@@ -199,7 +241,7 @@ async def on_message(message):
           await message.channel.send(
               "Could not find `"+ remove1 + "` in database!")
 
-    if message.content.startswith('$delay'):
+    if message.content.startswith('$delay '):
       await message.delete()
       icon = message.author.avatar_url
       rawUserInput = msg.split('$delay ')[-1]
@@ -224,7 +266,7 @@ async def on_message(message):
       except asyncio.TimeoutError:
         await message.channel.send("Sorry, you didn't reply in time!")
 
-    if message.content.startswith('$em'):
+    if message.content.startswith('$em '):
       await message.delete()
       icon = message.author.avatar_url
       rawUserInput = msg.split('$em ')[-1]
@@ -385,6 +427,9 @@ async def on_message(message):
       with open('audio/Rushia_Okiro_Hentai.mp3', 'rb') as fp:
         await message.channel.send(file=discord.File(fp, 'Rushia_Okiro.mp3'))
 
+@client.event
+async def on_message_delete(message):
+  client.sniped_messages[message.guild.id] = (message.content, message.author, message.channel.name, message.created_at)
         
 
 
