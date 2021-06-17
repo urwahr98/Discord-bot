@@ -111,14 +111,12 @@ async def on_message(message):
     if message.content.startswith('pls snipe'):
 
       try: 
-        
         contents, author, channel_name, time = client.sniped_messages[message.guild.id]
       except:
-        await message.channel.send(
-                "Nothing to snipe!")
+        await message.channel.send("Nothing to snipe!")
         return
       
-      embed = discord.Embed(description=contents, color=colorList, timestamp=time)
+      embed = discord.Embed(description=contents, color=choice(colorList), timestamp=time)
       embed.set_author(name=f"{author.name}#{author.discriminator}", icon_url=author.avatar_url)
       embed.set_footer(text= f"Deleted in : #{channel_name}")
       await message.channel.send(embed=embed)
