@@ -8,6 +8,7 @@ import requests
 import time
 import asyncio
 import pykakasi
+from PIL import Image,ImageFont,ImageDraw
 
 kks = pykakasi.kakasi()
 
@@ -27,8 +28,6 @@ async def reply(message):
 
 colorList = [discord.Color.blue(), discord.Color.dark_blue(), discord.Color.purple(), discord.Color.dark_purple(), discord.Color.red(), discord.Color.gold(), discord.Color.dark_gold(), discord.Color.green(), discord.Color.dark_green(), discord.Color.magenta(), discord.Color.teal(), discord.Color.orange(), discord.Color.dark_red()]
 
-deleted_msg = None
-
 async def embedMSG(message):
   if not message.attachments and message.reference is None:
     await message.delete()
@@ -39,6 +38,51 @@ async def embedMSG(message):
     if "http" in str(message.content):
       await message.channel.send(str(message.content))
 
+def add_subtitle(
+    bg,
+    text,
+    xy=("center", 200),
+    font="meme/impact.ttf",
+    font_size=60,
+    font_color=(255, 255, 255),
+    stroke=2,
+    stroke_color=(0, 0, 0),
+    shadow=(4, 4),
+    shadow_color=(0, 0, 0),
+):
+    """draw subtitle on image by pillow
+    Args:
+        bg(PIL image): image to add subtitle
+        text(str): subtitle
+        xy(tuple): absolute top left location of subtitle
+        ...: extra style of subtitle
+    Returns:
+        bg(PIL image): image with subtitle
+    """
+    stroke_width = stroke
+    xy = list(xy)
+    W, H = bg.width, bg.height
+    font = ImageFont.truetype(str(font), font_size)
+    w, h = font.getsize(text, stroke_width=stroke_width)
+    if xy[0] == "center":
+        xy[0] = (W - w) // 2
+    if xy[1] == "center":
+        xy[1] = (H - h) // 2
+    draw = ImageDraw.Draw(bg)
+    if shadow:
+        draw.text(
+            (xy[0] + shadow[0], xy[1] + shadow[1]), text, font=font, fill=shadow_color
+        )
+    draw.text(
+        (xy[0], xy[1]),
+        text,
+        font=font,
+        fill=font_color,
+        stroke_width=stroke_width,
+        stroke_fill=stroke_color,
+    )
+    return bg
+
 @client.event
 async def on_ready():
     print("We have logged as {0.user}".format(client))
@@ -46,6 +90,9 @@ async def on_ready():
 
     await client.change_presence(activity=discord.Activity(
         type=discord.ActivityType.watching, name='Ohayo Sekai GM'))
+
+    channel = client.get_channel(797672953239830529)
+    await channel.send('I\'m back!')
 
 @client.event
 async def on_message(message):
@@ -425,10 +472,21 @@ async def on_message(message):
       with open('audio/Rushia_Okiro_Hentai.mp3', 'rb') as fp:
         await message.channel.send(file=discord.File(fp, 'Rushia_Okiro.mp3'))
 
+    if msgL.startswith('our '):
+      texts = msgL.split(" ")
+      if len(texts) == 2:
+        bg = Image.open("meme/our_pic.png")
+        bg = add_subtitle(bg, msgL.upper())
+        bg.save("meme/out.png")
+        await message.channel.send(file=discord.File('meme/out.png'))
+
 @client.event
 async def on_message_delete(message):
-  client.sniped_messages[message.guild.id] = (message.content, message.author, message.channel.name, message.created_at)
-        
+  if message.author.id != 797753144641716245:
+    client.sniped_messages[message.guild.id] = (message.content, message.author, message.channel.name, message.created_at)
+    channel = client.get_channel(797672953239830529)
+    await channel.send('Someone deleted their message! <@!461782041856311306>')
+          
 
 
 keep_alive()
