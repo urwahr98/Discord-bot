@@ -9,6 +9,8 @@ import time
 import asyncio
 import pykakasi
 from PIL import Image,ImageFont,ImageDraw
+from io import BytesIO
+from wand.image import Image as ImageWand
 
 kks = pykakasi.kakasi()
 
@@ -18,7 +20,7 @@ client.sniped_messages = {}
 def mess_up(message):
   return ''.join(choice((str.upper, str.lower))(c) for c in message)
 
-async def reply(message):
+async def reply(message): 
   if message.author == client.user:
       return
 
@@ -83,6 +85,35 @@ def add_subtitle(
     )
     return bg
 
+async def meme(message):
+  if len(message.mentions) == 0:
+    user = message.author
+  else:
+    user = message.mentions[0] 
+
+  cap = Image.open("meme/cap.png")
+  cap = cap.resize((280, 280))
+
+  ## Retrieving user's profile picture
+  asset = user.avatar_url
+  data = BytesIO(await asset.read())
+  pfp = Image.open(data)
+  pfp = pfp.resize((512, 512))
+  pfp.save("meme/output.png")
+
+  ## Bulging the image
+  with ImageWand(filename='meme/output.png') as img:
+    img.virtual_pixel = 'black'
+    img.implode(-1.0) ## positive value for pinch/ negative for bulge
+    img.save(filename='meme/output.png')
+
+  ## impose cap image
+  pfp = Image.open('meme/output.png')
+  pfp.paste(cap, (110, 0), cap.convert('RGBA'))
+  pfp.save("meme/output.png")
+
+  
+
 @client.event
 async def on_ready():
     print("We have logged as {0.user}".format(client))
@@ -109,9 +140,9 @@ async def on_message(message):
         return
 
     
-    if message.content.startswith('$test'):
-      if "wtv" in str(message.author.roles):
-        await message.channel.send(message.author.roles)
+    # if message.content.startswith('$test'):
+    #   if "wtv" in str(message.author.roles):
+    #     await message.channel.send(message.author.roles)
       # emojilist = ['<a:towa:806768843585355787>','<a:towaaa:806784212811120650>']
       # await message.add_reaction(choice(emojilist))
       # for emoji in message.guild.emojis:
@@ -472,13 +503,19 @@ async def on_message(message):
       with open('audio/Rushia_Okiro_Hentai.mp3', 'rb') as fp:
         await message.channel.send(file=discord.File(fp, 'Rushia_Okiro.mp3'))
 
-    if msgL.startswith('our '):
+    if msgL.startswith('our ') or msgL.startswith('*our '):
       texts = msgL.split(" ")
       if len(texts) == 2:
         bg = Image.open("meme/our_pic.png")
-        bg = add_subtitle(bg, msgL.upper())
+        bg = add_subtitle(bg, msgL.upper().replace("*", ""))
         bg.save("meme/out.png")
         await message.channel.send(file=discord.File('meme/out.png'))
+    
+    if message.content.startswith('$meme'):
+      async with message.channel.typing():
+        await meme(message)
+        await message.channel.send(file=discord.File('meme/output.png'))
+
 
 @client.event
 async def on_message_delete(message):
@@ -487,7 +524,6 @@ async def on_message_delete(message):
     channel = client.get_channel(797672953239830529)
     await channel.send('Someone deleted their message! <@!461782041856311306>')
           
-
 
 keep_alive()
 client.run(os.getenv('TOKEN'))
